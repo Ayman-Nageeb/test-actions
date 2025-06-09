@@ -1,0 +1,29 @@
+name: Test Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        server: [SERVER1]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to ${{ matrix.server }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets[format('{0}_HOST', matrix.server)] }}
+          username: ${{ secrets[format('{0}_USER', matrix.server)] }}
+          key: ${{ secrets[format('{0}_SSH_KEY', matrix.server)] }}
+          script: |
+            cd /opt/ngd-test-deploy || git clone https://github.com/YOUR_USERNAME/ngd-test-deploy.git /opt/ngd-test-deploy
+            cd /opt/ngd-test-deploy
+            git pull origin main
+            make up
