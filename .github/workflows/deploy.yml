@@ -23,7 +23,7 @@ jobs:
           username: ${{ secrets[format('{0}_USER', matrix.server)] }}
           key: ${{ secrets[format('{0}_SSH_KEY', matrix.server)] }}
           script: |
-            cd /opt/ngd-test-deploy || git clone https://github.com/Ayman-Nageeb/test-actions.git /opt/ngd-test-deploy
-            cd /opt/ngd-test-deploy
+            cd ~/ngd-test-deploy || git clone https://github.com/Ayman-Nageeb/test-actions.git ~/ngd-test-deploy
+            cd ~/ngd-test-deploy
             git pull origin main
             make up
